@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criação de Playlist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            justify-content: center;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            justify-content: center;
+        }
+        .playlist {
+            list-style: none;
+            padding: 0;
+            justify-content: center;
+        }
+        .playlist-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+        }
+        .playlist-item img, .playlist-item video {
+            max-width: 100px;
+            height: auto;
+            justify-content: center;
+        }
+        .delay-input {
+            width: 50px;
+            margin-left: 10px;
+            justify-content: center;
+        }
+        .confirmation-screen {
+            display: none;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .confirmation-screen ul {
+            list-style: none;
+            padding: 0;
+            justify-content: center;
+        }
+        .confirmation-screen li {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Criação de Playlist</h1>
+
+    <div class="upload-area" id="upload-area">
+        Arraste e solte suas imagens e vídeos aqui ou clique para selecionar.
+    </div>
+
+    <ul class="playlist" id="playlist"></ul>
+
+    <button id="save-playlist">Salvar Playlist</button>
+
+    <div class="confirmation-screen" id="confirmation-screen">
+        <h2>Confirme sua Playlist</h2>
+        <ul id="confirmation-list"></ul>
+        <button id="confirm-playlist">Confirmar Playlist</button>
+        <button id="edit-playlist">Voltar e Editar</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script>
+        const uploadArea = document.getElementById('upload-area');
+        const playlist = document.getElementById('playlist');
+        const confirmationScreen = document.getElementById('confirmation-screen');
+        const confirmationList = document.getElementById('confirmation-list');
+
+        new Sortable(playlist, {
+            animation: 150,
+        });
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#333';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ccc';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        uploadArea.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.multiple = true;
+            input.accept = 'image/,video/';
+            input.onchange = (e) => handleFiles(e.target.files);
+            input.click();
+        });
+
+        async function handleFiles(files) {
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const li = document.createElement('li');
+                    li.classList.add('playlist-item');
+
+                    const mediaContainer = document.createElement('div');
+                    const arrayBuffer = e.target.result;
+
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(new Blob([arrayBuffer]));
+                        mediaContainer.appendChild(img);
+                    } else if (file.type.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = URL.createObjectURL(new Blob([arrayBuffer]));
+                        video.controls = true;
+                        mediaContainer.appendChild(video);
+                    }
+
+                    const delayInput = document.createElement('input');
+                    delayInput.type = 'number';
+                    delayInput.classList.add('delay-input');
+                    delayInput.placeholder = 'Delay (s)';
+
+                    li.appendChild(mediaContainer);
+                    li.appendChild(delayInput);
+                    playlist.appendChild(li);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        document.getElementById('save-playlist').addEventListener('click', async () => {
+            const playlistItems = playlist.querySelectorAll('.playlist-item');
+            const playlistData = [];
+            const fileMapping = { images: [], videos: [] };
+
+            for (const item of playlistItems) {
+                const media = item.querySelector('img, video');
+                const delay = item.querySelector('.delay-input').value || 0;
+                
+                // Fetch the array buffer for each media
+                const response = await fetch(media.src);
+                const arrayBuffer = await response.arrayBuffer();
+                const arrayBufferData = Array.from(new Uint8Array(arrayBuffer));
+
+                // Determine if the media is an image or video
+                const type = media.tagName.toLowerCase();
+
+                // Create a mapping for images and videos
+                if (type === 'img') {
+                    fileMapping.images.push(arrayBufferData);
+                } else if (type === 'video') {
+                    fileMapping.videos.push(arrayBufferData);
+                }
+
+                playlistData.push({ type, index: fileMapping[type].length - 1, delay });
+            }
+
+            // Prompt for playlist name
+            const playlistName = prompt("Nome da playlist:");
+
+            try {
+                const response = await fetch('/save-playlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ playlistName, items: playlistData, files: fileMapping }),
+                });
+
+                if (response.ok) {
+                    alert('Playlist confirmada com sucesso!');
+                } else {
+                    alert('Erro ao salvar a playlist.');
+                }
+            } catch (error) {
+                console.error('Erro ao salvar a playlist:', error);
+                alert('Erro ao salvar a playlist.');
+            }
+        });
+
+        document.getElementById('edit-playlist').addEventListener('click', () => {
+            confirmationScreen.style.display = 'none';
+            playlist.style.display = 'block';
+            uploadArea.style.display = 'block';
+            document.getElementById('save-playlist').style.display = 'block';
+        });
+    </script>
+  </body>
+</html>
