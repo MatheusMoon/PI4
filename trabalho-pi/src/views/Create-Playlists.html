@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Playlist Manager</title>
     <link rel="stylesheet" href="/css/Create-Playlists.css">
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,70 +15,58 @@
                 <!-- Lista de uploads recentes será renderizada aqui -->
             </ul>
         </aside>
+        
+        <!-- Carrossel de Slides -->
+        <div id="carousel-container">
+            <div id="slides" class="sortable-container"></div>
+            <div id="add-slide" class="add-slide-btn">+</div>
+        </div>
 
-        <!-- Formulário para a playlist -->
-        <div class="form">
-            <div class="media-container">
-                <div id="preview-container" class="sortable-container"></div>
-                <div class="media-button" id="add-media" onclick="openMediaPopup()">
-                    +
-                </div>
-            </div>
-
-            <!-- Botões de ação -->
-            <div class="button-container">
-                <button type="button" id="save-playlist" onclick="savePlaylist()">Salvar Playlist</button>
-                <button type="button" id="play-playlist" onclick="generatePreview()">Visualizar Playlist</button>
-            </div>
+        <!-- Botões de ação -->
+        <div id="actions">
+            <button id="save-playlist">Salvar Playlist</button>
+            <button id="play-playlist">Iniciar Playlist</button>
         </div>
     </div>
 
-    <!-- Modal de escolha de mídia -->
+    <!-- Popup de seleção de mídia ou texto -->
     <div id="media-popup" class="popup">
         <div class="popup-content">
-            <h2>Selecione o tipo de mídia:</h2>
-            <button class="btn-option" onclick="openTextEditor()">Texto</button>
-            <button class="btn-option" onclick="openImageUpload()">Imagem</button>
-            <button class="btn-option" onclick="openVideoUpload()">Vídeo</button>
-            <button class="btn-close" onclick="closeMediaPopup()">Fechar</button>
+            <h2>Adicionar Slide</h2>
+            <button id="add-text-btn" class="btn-option" onclick="openTextEditor()">Adicionar Texto</button>
+            <button id="add-media-btn" class="btn-option" onclick="openMediaUpload()">Adicionar Mídia</button>
+            <button id="close-popup-btn" class="btn-close" onclick="closePopup()">Fechar</button>
         </div>
     </div>
 
-    <!-- Popup específico para o Editor.js -->
+    <!-- Popup para o editor de texto -->
     <div id="text-editor-popup" class="popup">
         <div class="popup-content">
-            <div id="editorjs"></div>
-            <input type="file" id="background-image-input" style="display: none;" onchange="setBackgroundImage(event)">
-            <button class="btn-save" id="save-editor" type="button" onclick="saveEditorContent()">Salvar</button>
-            <button class="btn-close" onclick="closeTextEditor()">Fechar</button>
-            <button class="btn-background" type="button" onclick="document.getElementById('background-image-input').click()">Definir Imagem de Fundo</button>
+            <h2>Editor de Texto</h2>
+            <textarea id="tinymce-editor"></textarea>
+
+            <label for="background-color">Cor de fundo:</label>
+            <input type="color" id="background-color" name="background-color" value="#ffffff">
+            
+            <label for="background-image">Imagem de fundo:</label>
+            <input type="file" id="background-image" accept="image/*" onchange="previewBackgroundImage(event)">
+            <div id="image-preview"></div>
+
+            <button id="save-text" type="button" onclick="saveTextContent()">Salvar Slide</button>
+            <button id="close-popup-btn" class="btn-close" onclick="closePopup()">Fechar</button>
         </div>
     </div>
 
-    <!-- Popup de Upload de Imagem -->
-    <div id="image-upload-popup" class="popup">
+    <!-- Popup para o upload de mídia (imagem ou vídeo) -->
+    <div id="media-upload-popup" class="popup">
         <div class="popup-content">
-            <h2>Upload de Imagem</h2>
-            <div class="upload-area" ondrop="handleImageDrop(event)" ondragover="handleDragOver(event)" onclick="document.getElementById('image-input').click()">
-                Arraste a imagem aqui ou clique para fazer upload
-                <input type="file" id="image-input" style="display: none;" onchange="handleImageUpload()">
-            </div>
-            <button class="btn-close" onclick="closeImageUpload()">Fechar</button>
-        </div>
-    </div>
-
-    <!-- Popup de Upload de Vídeo -->
-    <div id="video-upload-popup" class="popup">
-        <div class="popup-content">
-            <h2>Upload de Vídeo</h2>
-            <div class="upload-area" ondrop="handleVideoDrop(event)" ondragover="handleDragOver(event)" onclick="document.getElementById('video-input').click()">
-                Arraste o vídeo aqui ou clique para fazer upload
-                <input type="file" id="video-input" style="display: none;" onchange="handleVideoUpload()">
-            </div>
-            <button class="btn-close" onclick="closeVideoUpload()">Fechar</button>
+            <h2>Upload de Mídia</h2>
+            <input type="file" id="media-upload" accept="image/*, video/*" onchange="handleMediaUpload()">
+            <button id="close-popup-btn" class="btn-close" onclick="closePopup()">Fechar</button>
         </div>
     </div>
 
     <script src="/js/Create-Playlists.js"></script>
+    <script src="/tinymce/tinymce.min.js"></script>
 </body>
 </html>
