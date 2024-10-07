@@ -124,3 +124,16 @@
 2024-10-03T15:12:37.861634Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
 2024-10-03T15:12:37.935998Z 0 [System] [MY-010931] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: ready for connections. Version: '8.0.30'  socket: ''  port: 3306  MySQL Community Server - GPL.
 2024-10-03T15:12:37.937652Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2024-10-03T21:03:02.812818Z 146 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.0.30).
+2024-10-03T21:03:02.814496Z 0 [System] [MY-013105] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Normal shutdown.
+2024-10-03T21:03:03.650219Z 0 [System] [MY-010910] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Shutdown complete (mysqld 8.0.30)  MySQL Community Server - GPL.
+2024-10-07T21:41:40.826131Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-file-priv: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+2024-10-07T21:41:40.826733Z 0 [Warning] [MY-010918] [Server] 'default_authentication_plugin' is deprecated and will be removed in a future release. Please use authentication_policy instead.
+2024-10-07T21:41:40.826777Z 0 [System] [MY-010116] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld (mysqld 8.0.30) starting as process 6000
+2024-10-07T21:41:40.907114Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-10-07T21:41:41.405302Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-10-07T21:41:42.028210Z 0 [Warning] [MY-013829] [Server] Missing data directory for ICU regular expressions: C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\lib\private\.
+2024-10-07T21:41:42.095288Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-10-07T21:41:42.102659Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-10-07T21:41:42.292066Z 0 [System] [MY-010931] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: ready for connections. Version: '8.0.30'  socket: ''  port: 3306  MySQL Community Server - GPL.
+2024-10-07T21:41:42.293727Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060

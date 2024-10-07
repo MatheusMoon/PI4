@@ -9,21 +9,21 @@
 </head>
 <body>
     <div class="container">
-        <aside class="sidebar">
-            <h2>Uploads Recentes</h2>
-            <ul id="recent-uploads">
-                <!-- Lista de uploads recentes será renderizada aqui -->
-            </ul>
-        </aside>
-        
-        <!-- Carrossel de Slides -->
-        <div id="carousel-container">
-            <div id="slides" class="sortable-container"></div>
-            <div id="add-slide" class="add-slide-btn">+</div>
+        <div class="grid">
+            <aside class="sidebar">
+                <h2>Uploads Recentes</h2>
+                <div id="recent-uploads"></div>
+            </aside>
+            
+            <!-- Carrossel de Slides -->
+            <div id="carousel-container" class="sortable-container">
+                <div id="add-slide" class="add-slide-btn">+</div>
+                <div id="slides"></div>               
+            </div>
         </div>
 
         <!-- Botões de ação -->
-        <div id="actions">
+        <div class="actions">
             <button id="save-playlist">Salvar Playlist</button>
             <button id="play-playlist">Iniciar Playlist</button>
         </div>
@@ -33,9 +33,9 @@
     <div id="media-popup" class="popup">
         <div class="popup-content">
             <h2>Adicionar Slide</h2>
-            <button id="add-text-btn" class="btn-option" onclick="openTextEditor()">Adicionar Texto</button>
-            <button id="add-media-btn" class="btn-option" onclick="openMediaUpload()">Adicionar Mídia</button>
-            <button id="close-popup-btn" class="btn-close" onclick="closePopup()">Fechar</button>
+            <button id="add-text-btn" class="btn-option">Adicionar Texto</button>
+            <button id="add-media-btn" class="btn-option">Adicionar Mídia</button>
+            <button id="close-popup-btn" class="btn-close" >Fechar</button>
         </div>
     </div>
 
@@ -49,11 +49,13 @@
             <input type="color" id="background-color" name="background-color" value="#ffffff">
             
             <label for="background-image">Imagem de fundo:</label>
-            <input type="file" id="background-image" accept="image/*" onchange="previewBackgroundImage(event)">
+            <input type="file" id="background-image" accept="image/*">
             <div id="image-preview"></div>
 
-            <button id="save-text" type="button" onclick="saveTextContent()">Salvar Slide</button>
-            <button id="close-popup-btn" class="btn-close" onclick="closePopup()">Fechar</button>
+            <div class="mt-2">
+                <button id="save-text" class="btn-close" type="button">Salvar Slide</button>
+                <button id="close-popup-btn" class="btn-close">Fechar</button>
+            </div>
         </div>
     </div>
 

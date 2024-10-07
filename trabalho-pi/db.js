@@ -6,7 +6,7 @@ async function connectToDatabase() {
       host: '127.0.0.1', // IP do servidor
       user: 'root',      // Nome de usuário
       password: '',      // Senha (substitua pela sua senha)
-      database: 'PI4'    // Nome do banco de dados
+      database: 'pi4'    // Nome do banco de dados
     });
 
     console.log('Conectado ao banco de dados MySQL');

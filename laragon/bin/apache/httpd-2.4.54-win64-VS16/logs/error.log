@@ -92,4 +92,13 @@ Apache server interrupted...
 [Thu Oct 03 12:12:38.235954 2024] [mpm_winnt:notice] [pid 1916:tid 336] AH00456: Apache Lounge VS16 Server built: Jun 22 2022 09:58:15
 [Thu Oct 03 12:12:38.235954 2024] [core:notice] [pid 1916:tid 336] AH00094: Command line: 'C:\\Users\\Kabessote\\Desktop\\PI4\\laragon\\bin\\apache\\httpd-2.4.54-win64-VS16\\bin\\httpd -d C:/Users/Kabessote/Desktop/PI4/laragon/bin/apache/httpd-2.4.54-win64-VS16'
 [Thu Oct 03 12:12:38.235954 2024] [mpm_winnt:notice] [pid 1916:tid 336] AH00418: Parent: Created child process 1724
-[Thu Oct 03 12:12:38.767383 2024] [mpm_winnt:notice] [pid 1724:tid 432] AH00354: Child: Starting 64 worker threads.
+Apache server interrupted...
+024] [mpm_winnt:notice] [pid 1724:tid 432] AH00354: Child: Starting 64 worker threads.
+[Thu Oct 03 18:03:04.528174 2024] [mpm_winnt:notice] [pid 1916:tid 336] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Thu Oct 03 18:03:06.557747 2024] [mpm_winnt:notice] [pid 1724:tid 432] AH00364: Child: All worker threads have exited.
+[Mon Oct 07 18:41:41.860523 2024] [core:warn] [pid 13008:tid 428] AH00098: pid file C:/Users/Kabessote/Desktop/PI4/laragon/bin/apache/httpd-2.4.54-win64-VS16/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Mon Oct 07 18:41:42.532239 2024] [mpm_winnt:notice] [pid 13008:tid 428] AH00455: Apache/2.4.54 (Win64) OpenSSL/1.1.1q PHP/8.1.10 configured -- resuming normal operations
+[Mon Oct 07 18:41:42.532239 2024] [mpm_winnt:notice] [pid 13008:tid 428] AH00456: Apache Lounge VS16 Server built: Jun 22 2022 09:58:15
+[Mon Oct 07 18:41:42.532239 2024] [core:notice] [pid 13008:tid 428] AH00094: Command line: 'C:\\Users\\Kabessote\\Desktop\\PI4\\laragon\\bin\\apache\\httpd-2.4.54-win64-VS16\\bin\\httpd -d C:/Users/Kabessote/Desktop/PI4/laragon/bin/apache/httpd-2.4.54-win64-VS16'
+[Mon Oct 07 18:41:42.532239 2024] [mpm_winnt:notice] [pid 13008:tid 428] AH00418: Parent: Created child process 11792
+[Mon Oct 07 18:41:43.063363 2024] [mpm_winnt:notice] [pid 11792:tid 432] AH00354: Child: Starting 64 worker threads.
