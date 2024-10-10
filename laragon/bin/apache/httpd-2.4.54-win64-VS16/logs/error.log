@@ -102,3 +102,9 @@ Apache server interrupted...
 [Mon Oct 07 18:41:42.532239 2024] [core:notice] [pid 13008:tid 428] AH00094: Command line: 'C:\\Users\\Kabessote\\Desktop\\PI4\\laragon\\bin\\apache\\httpd-2.4.54-win64-VS16\\bin\\httpd -d C:/Users/Kabessote/Desktop/PI4/laragon/bin/apache/httpd-2.4.54-win64-VS16'
 [Mon Oct 07 18:41:42.532239 2024] [mpm_winnt:notice] [pid 13008:tid 428] AH00418: Parent: Created child process 11792
 [Mon Oct 07 18:41:43.063363 2024] [mpm_winnt:notice] [pid 11792:tid 432] AH00354: Child: Starting 64 worker threads.
+[Wed Oct 09 11:59:47.715320 2024] [core:warn] [pid 14260:tid 428] AH00098: pid file C:/Users/Kabessote/Desktop/PI4/laragon/bin/apache/httpd-2.4.54-win64-VS16/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Wed Oct 09 11:59:48.360592 2024] [mpm_winnt:notice] [pid 14260:tid 428] AH00455: Apache/2.4.54 (Win64) OpenSSL/1.1.1q PHP/8.1.10 configured -- resuming normal operations
+[Wed Oct 09 11:59:48.360592 2024] [mpm_winnt:notice] [pid 14260:tid 428] AH00456: Apache Lounge VS16 Server built: Jun 22 2022 09:58:15
+[Wed Oct 09 11:59:48.360592 2024] [core:notice] [pid 14260:tid 428] AH00094: Command line: 'C:\\Users\\Kabessote\\Desktop\\PI4\\laragon\\bin\\apache\\httpd-2.4.54-win64-VS16\\bin\\httpd -d C:/Users/Kabessote/Desktop/PI4/laragon/bin/apache/httpd-2.4.54-win64-VS16'
+[Wed Oct 09 11:59:48.364582 2024] [mpm_winnt:notice] [pid 14260:tid 428] AH00418: Parent: Created child process 13328
+[Wed Oct 09 11:59:49.109589 2024] [mpm_winnt:notice] [pid 13328:tid 436] AH00354: Child: Starting 64 worker threads.

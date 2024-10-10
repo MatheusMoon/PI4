@@ -3,8 +3,7 @@ let currentSlideIndex = 0;
 let currentPlaylistId = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-
-    // Inicializar Sortable.js para permitir drag and drop nos slides
+    // Initialize Sortable.js for drag and drop functionality
     new Sortable(document.getElementById('slides'), {
         animation: 150,
         onEnd: function (evt) {
@@ -13,130 +12,186 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Eventos de botões para controlar a playlist
-    document.getElementById('add-slide').addEventListener('click', openMediaPopup); // Abrir popup para adicionar slides
-    document.getElementById('save-playlist').addEventListener('click', savePlaylist); // Salvar playlist
-    document.getElementById('play-playlist').addEventListener('click', startPlaylist); // Iniciar playlist
-    document.getElementById('save-text').addEventListener('click', saveTextContent); // Salvar conteúdo de texto
-    document.getElementById('add-text-btn').addEventListener('click', openTextEditor); // Abrir editor de texto
-    document.getElementById('add-media-btn').addEventListener('click', openMediaUpload); // Abrir popup de upload de mídia
-    document.getElementById('close-popup-btn').addEventListener('click', closePopup); // Fechar popups
-    document.getElementById('background-image').addEventListener('change', previewBackgroundImage); // Pré-visualizar imagem de fundo
+    // Bind event listeners to buttons
+    bindEventListeners();
 
+    // Load recent uploads
     getRecentUploads();
 });
 
-async function getRecentUploads() {
-    let divUploadsRecentes = document.getElementById('recent-uploads');
-    divUploadsRecentes.innerHTML = '';
-
-    const response = await fetch('/recent-uploads', {
-        method: 'GET',
+// Bind event listeners to buttons
+function bindEventListeners() {
+    document.getElementById('add-slide').addEventListener('click', openMediaPopup);
+    document.getElementById('save-playlist').addEventListener('click', savePlaylist);
+    document.getElementById('play-playlist').addEventListener('click', startPlaylist);
+    document.getElementById('save-text').addEventListener('click', saveTextContent);
+    document.getElementById('add-text-btn').addEventListener('click', openTextEditor);
+    document.getElementById('add-media-btn').addEventListener('click', openMediaUpload);
+    document.getElementById('close-popup-btn').addEventListener('click', closePopup);
+    document.getElementById("playlist-container").addEventListener("drop", handleDrop);
+    document.getElementById("playlist-container").addEventListener("dragover", function (e) {
+        e.preventDefault();
     });
+}
 
-    if (response.ok) {
-        const result = await response.json();
-        console.log({ result });
+// Função para lidar com o drop e adicionar o item à playlist
+function handleDrop(event) {
+    event.preventDefault();
+    const droppedToken = event.dataTransfer.getData("text/plain");
 
-        // Adicionando imagens recentes
-        if (Array.isArray(result.images) && result.images.length > 0) {
-            result.images.forEach(item => {
-                let element = document.createElement('div');
-                element.className = 'item';
-                element.innerHTML = `<img src="${item.content}" alt="Imagem" style="max-width: 100px;"/>`;
-                element.addEventListener('click', () => preencheComSlides(item.id)); // Associe o ID ou alguma ação
+    if (!droppedToken) {
+        console.error("Nenhum token encontrado");
+        return;
+    }
 
-                divUploadsRecentes.appendChild(element);
-            });
+    // Extrai o tipo e o ID do item arrastado
+    const [type, id] = droppedToken.split('-');
+
+    // Adiciona o slide à playlist
+    addSlideToPlaylist(id, type);
+}
+
+// Função para adicionar o slide à playlist com base no tipo e ID
+async function addSlideToPlaylist(id, type) {
+    try {
+        let slideWrapper;
+
+        // Carrega o slide conforme o tipo
+        if (type === 'image') {
+            slideWrapper = await loadMediaSlide(id, 'image');
+        } else if (type === 'video') {
+            slideWrapper = await loadMediaSlide(id, 'video');
+        } else if (type === 'text') {
+            slideWrapper = await loadTextSlide(id);
         }
 
-        // Adicionando vídeos recentes
-        if (Array.isArray(result.videos) && result.videos.length > 0) {
-            result.videos.forEach(item => {
-                let element = document.createElement('div');
-                element.className = 'item';
-                element.innerHTML = `<video src="${item.content}" controls style="max-width: 100px;"></video>`;
-                element.addEventListener('click', () => preencheComSlides(item.id)); // Associe o ID ou alguma ação
-
-                divUploadsRecentes.appendChild(element);
-            });
+        if (!(slideWrapper instanceof Node)) {
+            throw new Error('O slideWrapper não é um nó válido');
         }
-    } else {
-        console.error('Erro ao buscar uploads recentes:', await response.text());
+
+        // Adiciona o slide ao contêiner correto da playlist
+        const playlistContainer = document.getElementById('slides');
+        if (playlistContainer) {
+            playlistContainer.appendChild(slideWrapper);
+        } else {
+            throw new Error('Playlist container não encontrado no DOM');
+        }
+
+    } catch (error) {
+        console.error('Erro ao adicionar slide à playlist:', error);
     }
 }
 
 
-// Função para salvar conteúdo de texto no slide
-async function saveTextContent() {
-    const content = tinymce.get('tinymce-editor').getContent(); // Obtém o conteúdo do TinyMCE
 
-    // Captura a cor de fundo ou a URL da imagem
-    const backgroundColor = document.getElementById('background-color').value; // Cor de fundo escolhida
-    const backgroundImageInput = document.getElementById('background-image');
-    let backgroundImageUrl = null;
+// Função para carregar slides de mídia (imagem ou vídeo)
+async function loadMediaSlide(id, type) {
+    try {
+        const response = await fetch(`/${type}s/${id}`);
+        if (!response.ok) throw new Error(`Erro ao carregar o ${type}`);
 
-    // Se houver imagem de fundo, faz o upload dela
-    if (backgroundImageInput.files.length > 0) {
-        const formData = new FormData();
-        formData.append('image', backgroundImageInput.files[0]);
+        const mediaBlob = await response.blob();
+        const mediaUrl = URL.createObjectURL(mediaBlob);  // Cria URL do blob de mídia
+        const isVideo = type === 'video';
+        const mediaElement = createMediaElement(type, mediaUrl, isVideo);  // Cria o elemento de mídia (imagem ou vídeo)
 
-        try {
-            const response = await fetch('/upload-image', {
-                method: 'POST',
-                body: formData
-            });
+        const slideWrapper = createSlideWrapper(`slide-${type}-${id}`);  // Cria o wrapper do slide
+        slideWrapper.appendChild(mediaElement);  // Adiciona o conteúdo de mídia ao wrapper do slide
 
-            if (response.ok) {
-                const result = await response.json();
-                backgroundImageUrl = result.file.url; // Obtém a URL da imagem após o upload
-            } else {
-                alert('Erro ao enviar imagem de fundo.');
-                return;
-            }
-        } catch (error) {
-            console.error('Erro de rede ao fazer upload da imagem de fundo:', error);
-            alert('Erro ao enviar imagem de fundo.');
-            return;
-        }
+        return slideWrapper;  // Retorna o slide criado
+
+    } catch (error) {
+        console.error('Erro ao carregar o slide de mídia:', error);
     }
+}
 
-    // Cria um elemento de slide
+
+// Função para criar o wrapper do slide
+function createSlideWrapper(className, backgroundImageUrl = null) {
     const slideWrapper = document.createElement('div');
-    slideWrapper.className = 'slide-text-with-bg slide';
+    slideWrapper.className = 'slide';  // Aplicando a classe base
+    slideWrapper.style.width = '100%';
+    slideWrapper.style.height = '300px';  // Tamanho fixo para o slide
+    slideWrapper.style.overflow = 'hidden';
 
-    // Aplica a imagem de fundo, se houver
     if (backgroundImageUrl) {
         slideWrapper.style.backgroundImage = `url('${backgroundImageUrl}')`;
-        slideWrapper.style.backgroundSize = 'cover'; // Faz a imagem cobrir todo o slide
-    } else {
-        // slideWrapper.style = `border: 5px solid #fff; border-radius: 4px;`;
+        slideWrapper.style.backgroundSize = 'cover';
     }
 
-    // Adiciona o conteúdo HTML ao slide
-    const textWrapper = document.createElement('div');
-    textWrapper.classList.add('slide-text');
-    textWrapper.innerHTML = content;
-    slideWrapper.appendChild(textWrapper);
-
-    // Adiciona o slide ao container de slides
-    document.getElementById('slides').appendChild(slideWrapper);
-
-    // Salva o slide no array de itens da playlist (sem adicionar outro contêiner "slide")
-    playlistItems.push({
-        type: 'text',
-        content: slideWrapper.outerHTML, // Salva apenas o conteúdo interno, sem o contêiner de slide externo
-        time: 5 // Tempo padrão de exibição
-    });
-
-    tinymce.get('tinymce-editor').setContent('');
-
-    // Remove o editor TinyMCE e fecha o popup
-    tinymce.remove();
-    closePopup();
+    return slideWrapper;
 }
 
-// Função para abrir popup de seleção de mídia
+
+
+
+// Função para criar o elemento de mídia (imagem ou vídeo)
+function createMediaElement(type, src, isVideo = false) {
+    const element = document.createElement(isVideo ? 'video' : 'img');
+    element.src = src;
+    element.style.maxWidth = '100%';  // Define a largura máxima como 100% do contêiner
+    element.style.height = 'auto';    // Define a altura como automática para manter a proporção
+
+    if (isVideo) {
+        element.controls = true;       // Adiciona controles ao vídeo
+        element.style.maxHeight = '300px';  // Ajusta a altura máxima do vídeo
+    } else {
+        element.style.maxHeight = '150px';  // Ajusta a altura máxima da imagem
+    }
+
+    return element;
+}
+
+
+// Função para buscar os uploads recentes
+async function getRecentUploads() {
+    try {
+        const response = await fetch('/recent-uploads');
+        const data = await response.json();
+
+        // Verifica se o campo recentUploads existe e é um array
+        if (data.recentUploads && Array.isArray(data.recentUploads)) {
+            const recentUploadsContainer = document.getElementById('recent-uploads-container');
+            recentUploadsContainer.innerHTML = ''; // Limpa o contêiner
+
+            data.recentUploads.forEach(upload => {
+                let item;
+
+                if (upload.type === 'image') {
+                    item = createMediaElement('img', `/images/${upload.id}`);
+                } else if (upload.type === 'video') {
+                    item = createMediaElement('video', `/videos/${upload.id}`, true);
+                }
+
+                if (item) {
+                    // Adiciona o token ao item para arrastar e soltar
+                    item.setAttribute('draggable', 'true');
+                    item.setAttribute('data-token', upload.token);
+
+                    // Adiciona o evento de dragstart para o token
+                    item.addEventListener('dragstart', function (e) {
+                        e.dataTransfer.setData('text/plain', upload.token);
+                    });
+
+                    // Adiciona o item ao contêiner de uploads recentes
+                    recentUploadsContainer.appendChild(item);
+                }
+            });
+        } else {
+            console.error('Nenhum upload recente encontrado ou estrutura de resposta inválida:', data);
+        }
+    } catch (error) {
+        console.error('Erro ao carregar uploads recentes:', error);
+    }
+}
+
+function closePopup() {
+    const popups = document.querySelectorAll('.popup');
+    popups.forEach(popup => popup.style.display = 'none');
+}
+
+
+// Função para abrir o popup de mídia
 function openMediaPopup() {
     document.getElementById('media-popup').style.display = 'flex';
 }
@@ -146,32 +201,14 @@ function openMediaUpload() {
     document.getElementById('media-upload-popup').style.display = 'flex';
 }
 
-// Função para fechar popups
-function closePopup() {
-    // Fechar o popup de mídia
-    const mediaPopup = document.getElementById('media-popup');
-    if (mediaPopup) {
-        mediaPopup.style.display = 'none';
-    }
-
-    // Fechar o popup de editor de texto
-    const textEditorPopup = document.getElementById('text-editor-popup');
-    if (textEditorPopup) {
-        textEditorPopup.style.display = 'none';
-    }
-
-    // Fechar o popup de upload de mídia
-    const mediaUploadPopup = document.getElementById('media-upload-popup');
-    if (mediaUploadPopup) {
-        mediaUploadPopup.style.display = 'none';
-    }
-}
-
 // Função para abrir o editor de texto
 function openTextEditor() {
     document.getElementById('text-editor-popup').style.display = 'flex';
+    initializeTinyMCE();
+}
 
-    // Inicializa o TinyMCE na textarea
+// Função para inicializar o editor TinyMCE
+function initializeTinyMCE() {
     tinymce.init({
         selector: '#tinymce-editor',
         height: 300,
@@ -185,213 +222,87 @@ function openTextEditor() {
     });
 }
 
-// Função para pré-visualizar a imagem de fundo
-function previewBackgroundImage(event) {
-    const file = event.target.files[0]; // Obtém o arquivo de imagem selecionado
-    const reader = new FileReader(); // Cria um FileReader para ler o conteúdo do arquivo
+// Função para salvar o conteúdo do texto
+async function saveTextContent() {
+    const content = tinymce.get('tinymce-editor').getContent();
+    const backgroundImageUrl = await handleBackgroundImageUpload();
 
-    reader.onload = function (e) {
-        // Exibe a imagem selecionada como uma pré-visualização
-        const imagePreview = document.getElementById('image-preview');
-        imagePreview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; max-height: 100px; border: 1px solid #000; margin-top: 10px;" />`;
-    };
+    const slideWrapper = createSlideWrapper('slide-text-with-bg slide', backgroundImageUrl);
+    const textWrapper = document.createElement('div');
+    textWrapper.classList.add('slide-text');
+    textWrapper.innerHTML = content;
+    slideWrapper.appendChild(textWrapper);
 
-    if (file) {
-        reader.readAsDataURL(file); // Lê o conteúdo da imagem como URL
-    }
-}
+    document.getElementById('slides').appendChild(slideWrapper);
 
-// Função para fazer upload da mídia (imagem ou vídeo)
-async function handleMediaUpload() {
-    const fileInput = document.getElementById('media-upload');
-    const file = fileInput.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const mediaWrapper = document.createElement('div');
-        mediaWrapper.classList.add('slide-media');
-
-        // Verifica o tipo de arquivo (imagem ou vídeo)
-        if (file.type.startsWith('image')) {
-            // Cria o preview da imagem
-            const imgElement = document.createElement('img');
-            imgElement.src = e.target.result;
-            imgElement.classList.add('media-content');
-            mediaWrapper.appendChild(imgElement);
-
-            // Adiciona à playlist
-            playlistItems.push({ type: 'image', content: mediaWrapper.outerHTML, time: 5 });
-        } else if (file.type.startsWith('video')) {
-            // Cria o preview do vídeo
-            const videoElement = document.createElement('video');
-            videoElement.src = e.target.result;
-            videoElement.classList.add('media-content');
-            videoElement.controls = true;
-            mediaWrapper.appendChild(videoElement);
-
-            // Adiciona à playlist
-            playlistItems.push({ type: 'video', content: mediaWrapper.outerHTML, time: 5 });
-        }
-
-        // Adiciona o item à playlist na tela
-        document.getElementById('slides').appendChild(mediaWrapper);
-        closePopup(); // Fecha o popup
-    };
-    reader.readAsDataURL(file); // Lê o arquivo
-}
-
-// Função para enviar imagem ao backend e salvar no banco de dados
-async function uploadImage(file) {
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-        const response = await fetch('/upload-image', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Imagem enviada com sucesso:', result);
-            alert('Imagem enviada com sucesso!');
-
-            // Aqui você pode adicionar lógica para exibir a imagem usando result.file.url
-        } else {
-            console.error('Erro ao enviar a imagem:', await response.text());
-            alert('Erro ao enviar a imagem.');
-        }
-    } catch (error) {
-        console.error('Erro de rede:', error);
-        alert('Erro ao enviar a imagem.');
-    }
-}
-
-
-// Função para enviar vídeo ao backend e salvar no banco de dados
-async function uploadVideo(file, duration) {
-    const formData = new FormData();
-    formData.append('video', file);  // Envia o vídeo no formato de FormData
-    formData.append('length', duration);  // Envia a duração do vídeo para o backend
-
-    try {
-        // Envia o vídeo para o backend via POST
-        const response = await fetch('/upload-video', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Vídeo enviado com sucesso:', result);
-            alert('Vídeo enviado com sucesso!');
-        } else {
-            console.error('Erro ao enviar o vídeo:', await response.text());
-            alert('Erro ao enviar o vídeo.');
-        }
-    } catch (error) {
-        console.error('Erro de rede:', error);
-        alert('Erro ao enviar o vídeo.');
-    }
-}
-
-// Função para iniciar a playlist
-function startPlaylist() {
-    if (playlistItems.length === 0) {
-        alert('A playlist está vazia!');
-        return;
-    }
-
-    currentSlideIndex = 0;  // Começa da primeira posição
-
-    function showNextSlide() {
-        if (currentSlideIndex < playlistItems.length) {
-            const slide = playlistItems[currentSlideIndex];
-            displaySlide(slide);  // Exibe o slide atual
-            currentSlideIndex++;
-
-            const slideDuration = slide.time * 1000;
-            setTimeout(showNextSlide, slideDuration); // Exibe o próximo slide após o tempo
-        }
-    }
-
-    showNextSlide();  // Inicia a exibição
-}
-
-
-// Função para exibir um slide no elemento da página
-function displaySlide(slide) {
-    const slideElement = document.createElement('div');
-    slideElement.classList.add('slide');
-
-    // Verifica se o tipo do slide é imagem ou vídeo e ajusta o conteúdo
-    slideElement.innerHTML = slide.content;
-    document.getElementById('slides').appendChild(slideElement);
-}
-
-async function preencheComSlides(id) {
-    console.log('ID selecionado:', id);
-    currentPlaylistId = id;
-
-    const response = await fetch(`/playlist/${id}`, {
-        method: 'GET'
+    playlistItems.push({
+        type: 'text',
+        content: slideWrapper.outerHTML,
+        time: 5
     });
 
-    if (response.ok) {
-        const result = await response.json();
-        console.log({ preencheComSlides: result });
-
-        let divs = document.querySelector('#slides');
-        divs.innerHTML = '';
-        playlistItems = [];
-
-        result.playlist.items.forEach(item => {
-            let slideElement = document.createElement('div');
-            slideElement.innerHTML = item.content;
-
-            divs.appendChild(slideElement);
-
-            playlistItems.push({
-                type: item.type,
-                content: slideElement.outerHTML,
-                time: item.duration
-            })
-        });
-    } else {
-        console.error('Erro ao buscar a playlist');
-    }
+    tinymce.get('tinymce-editor').setContent('');
+    tinymce.remove();
+    closePopup();
 }
 
-async function savePlaylist() {
-    let name = document.querySelector('#recent-uploads').childNodes.length;  // ou outro valor relevante
+// Função para fazer o upload da imagem de fundo
+async function handleBackgroundImageUpload() {
+    const backgroundImageInput = document.getElementById('background-image');
+    let backgroundImageUrl = null;
 
+    if (backgroundImageInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('image', backgroundImageInput.files[0]);
+
+        try {
+            const response = await fetch('/upload-image', { method: 'POST', body: formData });
+            if (response.ok) {
+                const result = await response.json();
+                backgroundImageUrl = result.file.url;
+            } else {
+                alert('Error uploading background image.');
+            }
+        } catch (error) {
+            console.error('Network error uploading background image:', error);
+            alert('Error uploading background image.');
+        }
+    }
+    return backgroundImageUrl;
+}
+
+// Função para salvar a playlist no backend
+async function savePlaylist() {
     const payload = {
-        name: name,  // Envia apenas o nome da playlist
-        items: playlistItems  // Envia a lista de itens da playlist
+        name: document.querySelector('#recent-uploads').childNodes.length,
+        items: playlistItems
     };
 
     if (currentPlaylistId) {
-        payload.id = currentPlaylistId; // Inclui o ID se estiver atualizando uma playlist existente
+        payload.id = currentPlaylistId;
     }
 
-    console.log({ payload })
+    try {
+        const response = await fetch('/create-playlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-    const response = await fetch('/create-playlist', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
-
-    if (response.ok) {
-        const result = await response.json();
-        console.log({ result });
-
-        // Atualiza a lista de playlists recentes
-        getRecentUploads();
-    } else {
-        console.error('Erro ao salvar a playlist');
+        if (response.ok) {
+            alert('Playlist saved successfully!');
+            const savedPlaylist = await response.json();
+            currentPlaylistId = savedPlaylist.id;
+        } else {
+            throw new Error('Failed to save playlist');
+        }
+    } catch (error) {
+        alert('Error saving playlist: ' + error.message);
+        console.error(error);
     }
+}
+
+// Função para iniciar a playlist (to be implemented later)
+function startPlaylist() {
+    alert("Playlist is starting...");
 }

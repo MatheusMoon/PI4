@@ -1,3 +1,4 @@
+/* Estilos Globais */
 body {
     background-color: #1e1e1e;
     color: #f0f0f0;
@@ -6,13 +7,12 @@ body {
     height: 100vh;
     margin: 0;
     flex-direction: column;
-    /* Ajuste para o layout de uma única coluna */
 }
 
+/* Definição de grid para o layout geral */
 .grid {
     display: grid;
     grid-template-columns: auto 1fr;
-    display: grid;
 }
 
 .container {
@@ -22,34 +22,54 @@ body {
     height: 100%;
 }
 
+/* Estilo base de todos os slides */
 .slide {
     min-width: 500px;
     min-height: 250px;
     display: grid;
     justify-content: center;
     align-items: center;
-
     border: 5px solid #fff;
     border-radius: 10px;
+    background-color: #333; /* Cor de fundo padrão */
+    color: #f0f0f0;
+    padding: 1em;
 }
 
+/* Estilo para conteúdo de slides de texto e mídia */
+.slide-text,
+.slide-media {
+    color: #f0f0f0;
+    padding: 1em;
+}
+
+/* Imagens e vídeos dentro dos slides */
+.slide-media img,
+.slide-media video {
+    width: 100%;
+    border-radius: 5px;
+}
+
+/* Carousel - Contêiner para os slides */
 #carousel-container {
     display: grid;
     align-items: center;
     grid-auto-columns: max-content;
     justify-content: center;
     grid-auto-flow: column;
-
     column-gap: 2em;
 }
 
-.sortable-container {
-    background-color: #2c2c2c;
+/* Estilos de slides em uma playlist */
+.playlist-slide {
+    background-color: #333;
+    color: #f0f0f0;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 14px rgb(0 0 0 / 22%);
+    margin-bottom: 20px;
 }
 
+/* Estilos do botão de adicionar slides */
 .add-slide-btn {
     background-color: #3b3b3b;
     color: #f0f0f0;
@@ -65,7 +85,7 @@ body {
     background-color: #5a5a5a;
 }
 
-/* Botões de ação */
+/* Controles de slides (botões de ação) */
 .actions {
     display: grid;
     grid-auto-flow: column;
@@ -93,7 +113,6 @@ button:hover {
 /* Popup Styles */
 .popup {
     display: none;
-    /* Hidden by default */
     position: fixed;
     z-index: 1;
     left: 0;
@@ -101,7 +120,6 @@ button:hover {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Fallback color */
     justify-content: center;
     align-items: center;
 }
@@ -115,7 +133,8 @@ button:hover {
     max-width: 500px;
 }
 
-.btn-option {
+.btn-option,
+.btn-close {
     background-color: #3b3b3b;
     color: #f0f0f0;
     padding: 10px 15px;
@@ -126,25 +145,12 @@ button:hover {
     margin-bottom: 10px;
 }
 
-.btn-option:hover {
-    background-color: #5a5a5a;
-}
-
-.btn-close {
-    background-color: #3b3b3b;
-    color: #f0f0f0;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
+.btn-option:hover,
 .btn-close:hover {
     background-color: #5a5a5a;
 }
 
-/* Popup de Upload de Mídia */
+/* Estilos Popup de Upload de Mídia */
 #media-upload-popup {
     background-color: #333;
     border: 2px dashed #5a5a5a;
@@ -211,12 +217,12 @@ button:hover {
     transition: background-color 0.3s;
 }
 
-.tox-tinymce {
-    margin-bottom: 1em;
-}
-
 #text-editor-popup button:hover {
     background-color: #5a5a5a;
+}
+
+.tox-tinymce {
+    margin-bottom: 1em;
 }
 
 /* Lista de Slides e Previews */
@@ -231,45 +237,22 @@ button:hover {
     border-bottom-left-radius: 2em;
 }
 
-.slide-text,
-.slide-media {
-    color: #f0f0f0;
-    padding: 1em;
-}
-
-.slide-media img,
-.slide-media video {
-    width: 100%;
-    border-radius: 5px;
-}
-
-.playlist-slide {
-    background-color: #333;
-    color: #f0f0f0;
-    padding: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
-
 /* Ajustes de Responsividade */
 @media (max-width: 768px) {
-
     .slide-text,
     .slide-media {
         width: calc(50% - 10px);
-        /* 2 slides por linha em telas menores */
     }
 }
 
 @media (max-width: 480px) {
-
     .slide-text,
     .slide-media {
         width: 100%;
-        /* 1 slide por linha em telas muito pequenas */
     }
 }
 
+/* Sidebar e Layout Geral */
 .sidebar {
     padding: 1em;
     min-width: 250px;
@@ -280,25 +263,26 @@ button:hover {
     margin-top: 1em;
 }
 
+/* Recent Uploads */
 #recent-uploads {
     display: grid;
     grid-auto-flow: row;
     grid-auto-rows: max-content;
     row-gap: 1em;
+}
 
-    .item {
-        background-color: #333;
-        border-radius: 4px;
-        padding: 2em 1em;
-        display: grid;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        transition: ease all .2s;
+#recent-uploads .item {
+    background-color: #333;
+    border-radius: 4px;
+    padding: 2em 1em;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: ease all .2s;
+}
 
-        &:hover {
-            background-color: #2c2c2c;
-            transition: ease all .2s;
-        }
-    }
+#recent-uploads .item:hover {
+    background-color: #2c2c2c;
+    transition: ease all .2s;
 }

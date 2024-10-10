@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playlist Manager</title>
+    <title>Gerenciador de Playlist</title>
     <link rel="stylesheet" href="/css/Create-Playlists.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
@@ -12,43 +12,43 @@
         <div class="grid">
             <aside class="sidebar">
                 <h2>Uploads Recentes</h2>
-                <div id="recent-uploads"></div>
+                <div id="recent-uploads-container"></div> <!-- Área para uploads recentes -->
             </aside>
             
             <!-- Carrossel de Slides -->
-            <div id="carousel-container" class="sortable-container">
+            <div id="playlist-container" class="sortable-container">
                 <div id="add-slide" class="add-slide-btn">+</div>
-                <div id="slides"></div>               
+                <div id="slides"></div> <!-- Área onde os slides serão exibidos -->
             </div>
         </div>
 
-        <!-- Botões de ação -->
+        <!-- Botões de Ação -->
         <div class="actions">
             <button id="save-playlist">Salvar Playlist</button>
             <button id="play-playlist">Iniciar Playlist</button>
         </div>
     </div>
 
-    <!-- Popup de seleção de mídia ou texto -->
+    <!-- Popup de Seleção de Mídia ou Texto -->
     <div id="media-popup" class="popup">
         <div class="popup-content">
             <h2>Adicionar Slide</h2>
             <button id="add-text-btn" class="btn-option">Adicionar Texto</button>
             <button id="add-media-btn" class="btn-option">Adicionar Mídia</button>
-            <button id="close-popup-btn" class="btn-close" >Fechar</button>
+            <button id="close-popup-btn" class="btn-close">Fechar</button>
         </div>
     </div>
 
-    <!-- Popup para o editor de texto -->
+    <!-- Popup para Editor de Texto -->
     <div id="text-editor-popup" class="popup">
         <div class="popup-content">
             <h2>Editor de Texto</h2>
             <textarea id="tinymce-editor"></textarea>
 
-            <label for="background-color">Cor de fundo:</label>
+            <label for="background-color">Cor de Fundo:</label>
             <input type="color" id="background-color" name="background-color" value="#ffffff">
             
-            <label for="background-image">Imagem de fundo:</label>
+            <label for="background-image">Imagem de Fundo:</label>
             <input type="file" id="background-image" accept="image/*">
             <div id="image-preview"></div>
 
@@ -59,11 +59,11 @@
         </div>
     </div>
 
-    <!-- Popup para o upload de mídia (imagem ou vídeo) -->
+    <!-- Popup para Upload de Mídia (Imagem ou Vídeo) -->
     <div id="media-upload-popup" class="popup">
         <div class="popup-content">
             <h2>Upload de Mídia</h2>
-            <input type="file" id="media-upload" accept="image/*, video/*" onchange="handleMediaUpload()">
+            <input type="file" id="media-upload" accept="image/*, video/*" onchange="handleMediaUpload(event, this.files[0].type)">
             <button id="close-popup-btn" class="btn-close" onclick="closePopup()">Fechar</button>
         </div>
     </div>
