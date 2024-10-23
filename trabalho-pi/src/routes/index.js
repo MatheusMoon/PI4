@@ -40,8 +40,8 @@ const uploadImage = async (req, res) => {
             return res.status(400).json({ message: 'Nenhum arquivo enviado' });
         }
 
-        const imageBuffer = req.file.buffer;
-        const uploadDate = new Date();
+        const imageBuffer = req.file.buffer; // Obtendo o conteúdo da imagem
+        const uploadDate = new Date(); // Data de upload
 
         const connection = await connectToDatabase();
         const [result] = await connection.execute(
@@ -49,9 +49,14 @@ const uploadImage = async (req, res) => {
             [imageBuffer, uploadDate]
         );
 
+        const imageUrl = `/images/${result.insertId}`; // URL da imagem
+
         res.status(200).json({
             success: true,
-            file: { url: `/images/${result.insertId}` }
+            file: {
+                url: imageUrl,
+                id: result.insertId
+            }
         });
     } catch (err) {
         console.error('Erro ao salvar imagem:', err);
@@ -69,7 +74,6 @@ router.post('/upload-video', upload.single('video'), async (req, res) => {
 
     const { duration } = req.body; // Duração do vídeo enviada no FormData
     try {
-        const { filename, mimetype, size } = req.file;
         const content = req.file.buffer; // O conteúdo do arquivo em formato binário
 
         const connection = await connectToDatabase();
@@ -98,10 +102,8 @@ router.post('/upload-text', async (req, res) => {
 
     try {
         const connection = await connectToDatabase();
-        const uploadDate = new Date();
-
         const [result] = await connection.execute(
-            'INSERT INTO textos (content, has-background, image_id) VALUES (?, ?, ?)',
+            'INSERT INTO textos (content, has_background, image_id) VALUES (?, ?, ?)',
             [content, 1, imageId || null]
         );
 
@@ -116,7 +118,6 @@ router.post('/upload-text', async (req, res) => {
 });
 
 // Rota para buscar imagem pelo ID
-// Rota para buscar imagem pelo ID
 router.get('/images/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -124,16 +125,12 @@ router.get('/images/:id', async (req, res) => {
         const [rows] = await connection.execute('SELECT content FROM images WHERE id = ?', [id]);
 
         if (rows.length === 0) {
-            await connection.end(); // Certificar que a conexão é fechada ao retornar
             return res.status(404).json({ message: 'Imagem não encontrada' });
         }
 
         const image = rows[0].content;
 
-        // Definir o cabeçalho de Content-Type conforme o tipo da imagem
-        res.set('Content-Type', 'image/jpeg');  // Ou 'image/png', se for o caso
-
-        await connection.end(); // Encerrar conexão antes de enviar a resposta
+        res.set('Content-Type', 'image/jpeg'); // Ou 'image/png', se for o caso
         res.send(image);
         
     } catch (error) {
@@ -147,21 +144,15 @@ router.get('/videos/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const connection = await connectToDatabase();
-        
-        // Recuperar o vídeo do banco de dados pelo ID
         const [rows] = await connection.execute('SELECT content FROM videos WHERE id = ?', [id]);
         
         if (rows.length === 0) {
-            await connection.end(); // Certificar que a conexão é fechada ao retornar
             return res.status(404).json({ message: 'Vídeo não encontrado' });
         }
 
         const video = rows[0].content;
         
-        // Definir o cabeçalho correto para enviar o binário do vídeo
         res.setHeader('Content-Type', 'video/mp4'); // Ajuste conforme necessário
-        
-        await connection.end(); // Encerrar conexão antes de enviar a resposta
         res.send(video);
         
     } catch (error) {
@@ -182,19 +173,13 @@ router.get('/recent-uploads', async (req, res) => {
             LIMIT 20
         `);
 
-        const uploads = rows.map(upload => {
-            // Gerar um token para cada upload
-            const token = `${upload.type}-${upload.id}`;
-            
-            return {
-                id: upload.id,
-                type: upload.type,
-                token: token,  // Token gerado
-                src: `/${upload.type}s/${upload.id}`,  // URL de exibição do item ajustado
-            };
-        });
+        const uploads = rows.map(upload => ({
+            id: upload.id,
+            type: upload.type,
+            token: `${upload.type}-${upload.id}`,
+            src: `/${upload.type}s/${upload.id}`,
+        }));
 
-        // Enviar os uploads com o token gerado
         res.json({ recentUploads: uploads });
     } catch (error) {
         console.error('Erro ao carregar uploads recentes:', error);
@@ -202,61 +187,108 @@ router.get('/recent-uploads', async (req, res) => {
     }
 });
 
-// Rota para criar ou atualizar uma playlist e salvar os itens no formato JSON
-router.post('/create-playlist', async (req, res) => {
-    const { id, name, items } = req.body;
-
-    if (!name || !items || items.length === 0) {
-        return res.status(400).json({ message: 'Nome da playlist e itens são obrigatórios' });
-    }
-
+// Rota para buscar texto pelo ID
+router.get('/text/:id', async (req, res) => {
+    const { id } = req.params;
     try {
         const connection = await connectToDatabase();
-        const updatedAt = new Date();
-        let playlistId = id;
+        const [textRows] = await connection.execute('SELECT content, image_id FROM textos WHERE id = ?', [id]);
 
-        if (id) {
-            // Atualizar playlist existente
-            const [rows] = await connection.execute('SELECT * FROM playlists WHERE id = ?', [id]);
-
-            if (rows.length === 0) {
-                return res.status(404).json({ message: 'Playlist não encontrada' });
-            }
-
-            await connection.execute(
-                'UPDATE playlists SET name = ?, updatedAt = ? WHERE id = ?',
-                [name, updatedAt, id]
-            );
-        } else {
-            // Criar nova playlist
-            const createdAt = new Date();
-            const [result] = await connection.execute(
-                'INSERT INTO playlists (name, createdAt, updatedAt) VALUES (?, ?, ?)',
-                [name, createdAt, updatedAt]
-            );
-            playlistId = result.insertId;
+        if (textRows.length === 0) {
+            return res.status(404).json({ message: 'Texto não encontrado' });
         }
 
-        // Montar o JSON para salvar na tabela "playlist"
-        const playlistJSON = items.map((item, index) => ({
-            order: index + 1,  // Ordem dos itens
-            type: item.type,    // Tipo do item: 'image', 'video', 'text'
-            contentId: item.contentId,  // O ID do conteúdo (ID da imagem, vídeo, ou texto)
-            duration: item.duration     // Tempo que o item ficará na tela (em segundos)
-        }));
+        const text = textRows[0];
 
-        // Salvar o JSON na coluna da tabela 'playlist'
-        await connection.execute(
-            'UPDATE playlists SET content = ? WHERE id = ?',
-            [JSON.stringify(playlistJSON), playlistId]
-        );
+        // Caso exista uma imagem de fundo associada
+        let backgroundImageUrl = null;
+        if (text.image_id) {
+            const [imageRows] = await connection.execute('SELECT content FROM images WHERE id = ?', [text.image_id]);
+            if (imageRows.length > 0) {
+                backgroundImageUrl = `/images/${text.image_id}`;
+            }
+        }
 
-        return res.status(200).json({ success: true, message: 'Playlist e itens salvos com sucesso!', playlistId });
+        res.status(200).json({
+            content: text.content,
+            backgroundImageUrl: backgroundImageUrl
+        });
     } catch (error) {
-        console.error('Erro ao salvar a playlist e itens:', error);
-        res.status(500).json({ message: 'Erro ao salvar a playlist e itens' });
+        console.error('Erro ao buscar texto:', error);
+        res.status(500).json({ message: 'Erro ao buscar o texto' });
     }
 });
 
-// Exporta o router como default
+
+// Rota para buscar uma playlist específica
+router.get('/playlists/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const connection = await connectToDatabase();
+        
+        // Buscar a playlist pelo ID
+        const [playlistRows] = await connection.execute('SELECT * FROM playlists WHERE id = ?', [id]);
+        if (playlistRows.length === 0) {
+            return res.status(404).json({ message: 'Playlist não encontrada' });
+        }
+
+        const playlist = playlistRows[0];
+
+        // Buscar os itens da playlist (assumindo uma tabela de itens)
+        const [itemsRows] = await connection.execute('SELECT * FROM playlist_items WHERE playlist_id = ?', [id]);
+        const items = itemsRows.map(item => ({
+            type: item.type,   // Tipo do item (imagem, vídeo, texto)
+            id: item.id,       // ID do item
+            time: item.duration // Duração do item (se aplicável)
+        }));
+
+        res.json({
+            id: playlist.id,
+            name: playlist.name,
+            coverId: playlist.cover_id,
+            items: items
+        });
+    } catch (error) {
+        console.error('Erro ao buscar a playlist:', error);
+        res.status(500).json({ message: 'Erro ao buscar a playlist' });
+    }
+});
+
+
+// Rota para salvar a playlist
+router.post('/save-playlist', async (req, res) => {
+    console.log('Dados recebidos:', req.body); // Log dos dados recebidos
+
+    const { name, unicode, coverId } = req.body;
+
+    // Validações
+    if (!name || typeof name !== 'string' || name.trim() === '') {
+        return res.status(400).json({ success: false, message: 'Nome da playlist é obrigatório!' });
+    }
+
+    if (!Array.isArray(unicode)) {
+        return res.status(400).json({ success: false, message: 'Os itens da playlist são obrigatórios!' });
+    }
+
+    if (!coverId) {
+        return res.status(400).json({ success: false, message: 'Por favor, selecione uma capa para a playlist.' });
+    }
+
+    const connection = await connectToDatabase(); // Estabelecendo conexão com o banco
+    const query = `
+        INSERT INTO playlists (name, unicode, cover_id) 
+        VALUES (?, ?, ?)
+    `;
+
+    // O unicode deve ser convertido para JSON antes de ser salvo
+    try {
+        const [result] = await connection.execute(query, [name, JSON.stringify(unicode), coverId]);
+        res.status(201).json({ success: true, message: 'Playlist salva com sucesso!' });
+    } catch (error) {
+        console.error('Erro ao salvar a playlist:', error); // Log do erro
+        res.status(500).json({ success: false, message: 'Erro ao salvar a playlist' });
+    }
+});
+
 export default router;

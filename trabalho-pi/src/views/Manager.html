@@ -1,0 +1,487 @@
+// Variáveis globais
+let playlistItems = [];
+let currentSlideIndex = 0;
+let currentPlaylistId = null;
+let coverId = '';
+
+// Funções de inicialização
+document.addEventListener('DOMContentLoaded', function () {
+    initializeDragAndDrop();
+    bindEventListeners();
+    getRecentUploads();
+    initializeDragAndDropForCover();
+});
+
+// Funções de ligação de eventos
+function bindEventListeners() {
+    document.getElementById('add-slide').addEventListener('click', openMediaPopup);
+    document.getElementById('save-playlist').addEventListener('click', openSavePlaylistPopup);
+    document.getElementById('play-playlist').addEventListener('click', startPlaylist);
+    document.getElementById('save-text').addEventListener('click', saveTextContent);
+    document.getElementById('add-text-btn').addEventListener('click', openTextEditor);
+    document.getElementById('add-image-btn').addEventListener('click', openImageUploadPopup);
+    document.getElementById('add-video-btn').addEventListener('click', openVideoUploadPopup);
+    document.getElementById('close-popup-btn').addEventListener('click', closePopup);
+    document.getElementById('confirm-save-playlist').addEventListener('click', savePlaylist);
+    
+    const playlistContainer = document.getElementById("playlist-container");
+    playlistContainer.addEventListener("drop", handleDrop);
+    playlistContainer.addEventListener("dragover", (e) => e.preventDefault());
+}
+
+// Funções de drag-and-drop
+function initializeDragAndDrop() {
+    new Sortable(document.getElementById('slides'), {
+        animation: 150,
+        onEnd: function (evt) {
+            const movedItem = playlistItems.splice(evt.oldIndex, 1)[0];
+            playlistItems.splice(evt.newIndex, 0, movedItem);
+        }
+    });
+}
+
+function initializeDragAndDropForCover() {
+    const coverDropArea = document.getElementById('cover-drop-area');
+    const uploadCoverInput = document.getElementById('upload-cover-input');
+
+    coverDropArea.addEventListener('click', () => uploadCoverInput.click());
+    coverDropArea.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        coverDropArea.classList.add('hover');
+    });
+    coverDropArea.addEventListener('dragleave', () => coverDropArea.classList.remove('hover'));
+    coverDropArea.addEventListener('drop', (event) => {
+        event.preventDefault();
+        coverDropArea.classList.remove('hover');
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            handleCoverUpload(files[0]);
+        }
+    });
+}
+
+// Funções de manipulação de slides
+async function addSlideToPlaylist(id, type) {
+    try {
+        let slideWrapper;
+
+        if (type === 'image') {
+            slideWrapper = await loadMediaSlide(id, 'image');
+        } else if (type === 'video') {
+            slideWrapper = await loadMediaSlide(id, 'video');
+        } else if (type === 'text') {
+            slideWrapper = await loadTextSlide(id);
+        } else {
+            throw new Error('Tipo de slide desconhecido');
+        }
+
+        if (!(slideWrapper instanceof Node)) {
+            throw new Error('O slideWrapper não é um nó válido');
+        }
+
+        const playlistContainer = document.getElementById('slides');
+        playlistContainer.appendChild(slideWrapper);
+        playlistItems.push({
+            type: type,
+            content: slideWrapper.outerHTML,
+            time: 5 // Duração padrão
+        });
+    } catch (error) {
+        console.error('Erro ao adicionar slide à playlist:', error);
+    }
+}
+
+async function handleDrop(event) {
+    event.preventDefault();
+    const droppedToken = event.dataTransfer.getData("text/plain");
+
+    if (!droppedToken) {
+        console.error("Nenhum token encontrado");
+        return;
+    }
+
+    const [type, id] = droppedToken.split('-');
+    if (!type || !id) {
+        console.error('Token inválido:', droppedToken);
+        return;
+    }
+    
+    await addSlideToPlaylist(id, type);
+}
+
+// Funções de mídia (imagem e vídeo)
+async function loadMediaSlide(id, type) {
+    try {
+        const response = await fetch(`/${type}s/${id}`);
+        if (!response.ok) throw new Error(`Erro ao carregar o ${type}`);
+
+        const mediaBlob = await response.blob();
+        const mediaUrl = URL.createObjectURL(mediaBlob);
+        const isVideo = type === 'video';
+        const mediaElement = createMediaElement(type, mediaUrl, isVideo);
+        
+        const slideWrapper = createSlideWrapper(`slide-${type}-${id}`);
+        slideWrapper.appendChild(mediaElement);
+        return slideWrapper;
+    } catch (error) {
+        console.error('Erro ao carregar o slide de mídia:', error);
+    }
+}
+
+function createMediaElement(type, src, isVideo = false) {
+    const element = document.createElement(isVideo ? 'video' : 'img');
+    element.src = src;
+    element.style.maxWidth = '100%';
+    element.style.height = 'auto';
+
+    if (isVideo) {
+        element.controls = true;
+        element.style.maxHeight = '300px';
+        element.addEventListener('loadedmetadata', function () {
+            const durationInSeconds = Math.floor(element.duration);
+            const timeBubble = element.parentElement.querySelector('.time-bubble');
+            if (timeBubble) {
+                timeBubble.textContent = durationInSeconds;
+                updateSlideDuration(element.parentElement, durationInSeconds);
+            }
+        });
+    } else {
+        element.style.maxHeight = '150px';
+    }
+
+    return element;
+}
+
+async function addImageSlide(imageUrl) {
+    const slideWrapper = createSlideWrapper('slide-image');
+    const imgElement = document.createElement('img');
+    imgElement.src = imageUrl;
+    imgElement.style.maxWidth = '100%';
+    imgElement.style.height = 'auto';
+
+    slideWrapper.appendChild(imgElement);
+    document.getElementById('slides').appendChild(slideWrapper);
+
+    playlistItems.push({
+        type: 'image',
+        content: slideWrapper.outerHTML,
+        time: 5 // Duração padrão
+    });
+}
+
+async function addVideoSlide(videoUrl) {
+    const slideWrapper = createSlideWrapper('slide-video');
+    const videoElement = document.createElement('video');
+    videoElement.src = videoUrl;
+    videoElement.controls = true;
+    videoElement.style.maxWidth = '100%';
+    videoElement.style.height = 'auto';
+
+    slideWrapper.appendChild(videoElement);
+    document.getElementById('slides').appendChild(slideWrapper);
+
+    playlistItems.push({
+        type: 'video',
+        content: slideWrapper.outerHTML,
+        time: 5 // Duração padrão
+    });
+}
+
+// Funções de upload
+async function imageUpload(event) {
+    const imageUploadInput = document.getElementById('image-upload-input');
+
+    if (imageUploadInput.files.length === 0) {
+        console.log('Por favor, selecione uma imagem para upload.');
+        return;
+    }
+
+    const file = imageUploadInput.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const response = await fetch('/upload-image', { method: 'POST', body: formData });
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            console.log('Imagem enviada com sucesso!');
+            await addImageSlide(data.file.url); // Adiciona o slide após o upload
+            closePopup();
+        } else {
+            console.log('Erro ao enviar a imagem.');
+        }
+    } catch (error) {
+        console.error('Erro ao fazer upload de imagem:', error);
+    }
+}
+
+async function videoUpload(event) {
+    const videoUploadInput = document.getElementById('video-upload-input');
+
+    if (videoUploadInput.files.length === 0) {
+        console.log('Por favor, selecione um vídeo para upload.');
+        return;
+    }
+
+    const file = videoUploadInput.files[0];
+    
+    // Recuperar a duração do vídeo
+    const videoDuration = await getVideoDuration(file);
+
+    if (!videoDuration) {
+        console.log('Não foi possível recuperar a duração do vídeo.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('video', file);
+    formData.append('duration', videoDuration); // Adicionando a duração ao FormData
+
+    try {
+        const response = await fetch('/upload-video', { method: 'POST', body: formData });
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            console.log('Vídeo enviado com sucesso!');
+            await addVideoSlide(data.file.url); // Adiciona o slide após o upload
+            closePopup();
+        } else {
+            console.error('Erro ao enviar o vídeo:', data.message || 'Resposta inesperada do servidor');
+        }
+    } catch (error) {
+        console.error('Erro ao fazer upload de vídeo:', error);
+    }
+}
+
+// Funções relacionadas ao texto
+function openTextEditor() {
+    document.getElementById('text-editor-popup').style.display = 'flex';
+    initializeTinyMCE();
+}
+
+function initializeTinyMCE() {
+    tinymce.init({
+        selector: '#tinymce-editor',
+        height: 300,
+        menubar: false,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
+        setup: function (editor) {
+            editor.on('change', function () {
+                editor.save();
+            });
+        }
+    });
+}
+
+// Funções de playlist
+function openSavePlaylistPopup() {
+    document.getElementById('save-playlist-popup').style.display = 'flex';
+}
+
+async function savePlaylist() {
+    const playlistNameInput = document.getElementById('playlist-name').value;
+    if (!playlistNameInput) {
+        alert('Nome da playlist é obrigatório!');
+        return;
+    }
+
+    // Verifica se o ID da capa da playlist foi definido
+    if (!coverId) {
+        alert('Por favor, faça upload de uma capa para a playlist.');
+        return;
+    }
+
+    const playlistData = {
+        name: playlistNameInput,
+        unicode: playlistItems.map(item => ({
+            type: item.type,
+            id: item.id,
+            duration: item.time
+        })),
+        coverId: coverId // Usa o ID da capa armazenada
+    };
+
+    console.log('Dados da Playlist:', playlistData); // Log dos dados a serem enviados
+
+    try {
+        const response = await fetch('/save-playlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(playlistData)
+        });
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            console.error('Erro ao salvar a playlist:', errorResponse);
+            throw new Error('Erro ao salvar a playlist');
+        }
+
+        alert('Playlist salva com sucesso!');
+        playlistItems = [];
+        coverId = null; // Limpa o ID da capa após o salvamento
+        closeSavePlaylistPopup(); // Fecha o modal após salvar
+    } catch (error) {
+        console.error('Erro ao salvar a playlist:', error);
+        alert('Ocorreu um erro ao salvar a playlist. Tente novamente mais tarde.');
+    }
+}
+
+// Funções de manipulação de UI
+function openMediaPopup() {
+    document.getElementById('media-popup').style.display = 'flex';
+}
+
+function openImageUploadPopup() {
+    document.getElementById('image-upload-popup').style.display = 'flex';
+}
+
+function openVideoUploadPopup() {
+    document.getElementById('video-upload-popup').style.display = 'flex';
+}
+
+function closePopup() {
+    document.querySelectorAll('.popup').forEach(popup => popup.style.display = 'none');
+}
+
+function getRecentUploads() {
+    fetch('/recent-uploads')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar uploads recentes');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const recentUploadsContainer = document.getElementById('recent-uploads-container');
+            recentUploadsContainer.innerHTML = '';
+
+            data.recentUploads.forEach(upload => {
+                const uploadItem = document.createElement('div');
+                uploadItem.classList.add('upload-item');
+                
+                // Atribui token do tipo e ID
+                uploadItem.setAttribute('draggable', 'true');
+                uploadItem.dataset.token = `${upload.type}-${upload.id}`; // Gerando o token
+                uploadItem.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', uploadItem.dataset.token);
+                });
+
+                let mediaElement;
+                if (upload.type === 'image') {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = upload.src;
+                    mediaElement.alt = 'Imagem';
+                } else if (upload.type === 'video') {
+                    mediaElement = document.createElement('video');
+                    mediaElement.src = upload.src;
+                    mediaElement.controls = true;
+                }
+
+                uploadItem.appendChild(mediaElement);
+                recentUploadsContainer.appendChild(uploadItem);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar uploads recentes:', error);
+        });
+}
+
+function startPlaylist() {
+    // Implementar a lógica para iniciar a reprodução da playlist
+}
+
+async function saveTextContent() {
+    const content = tinymce.get('tinymce-editor').getContent();
+    const backgroundImageUrl = await handleBackgroundImageUpload();
+
+    const slideWrapper = createSlideWrapper('slide-text-with-bg slide', backgroundImageUrl);
+    const textWrapper = document.createElement('div');
+    textWrapper.classList.add('slide-text');
+    textWrapper.innerHTML = content;
+    slideWrapper.appendChild(textWrapper);
+
+    document.getElementById('slides').appendChild(slideWrapper);
+
+    playlistItems.push({
+        type: 'text',
+        content: slideWrapper.outerHTML,
+        time: 5 // duração padrão
+    });
+
+    tinymce.get('tinymce-editor').setContent('');
+    tinymce.remove();
+    closePopup();
+}
+
+async function handleCoverUpload(event) {
+    const imageUploadInput = event.target;
+
+    if (!imageUploadInput.files || imageUploadInput.files.length === 0) {
+        console.log('Por favor, selecione uma imagem para upload.');
+        return;
+    }
+
+    const file = imageUploadInput.files[0];
+    const previewUrl = URL.createObjectURL(file);
+    const coverPreview = document.getElementById('cover-preview');
+
+    coverPreview.src = previewUrl; 
+    coverPreview.style.display = 'block'; 
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const response = await fetch('/upload-image', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            console.log('Imagem da capa enviada com sucesso!');
+            coverId = data.file.id; 
+            console.log('Cover ID armazenado:', coverId); 
+
+            imageUploadInput.value = '';
+        } else {
+            console.log('Erro ao enviar a imagem da capa:', data.message);
+            coverPreview.style.display = 'none'; 
+        }
+    } catch (error) {
+        console.error('Erro ao fazer upload da imagem da capa:', error);
+        coverPreview.style.display = 'none'; 
+    } finally {
+        URL.revokeObjectURL(previewUrl);
+    }
+}
+
+
+function createSlideWrapper(slideId) {
+    const slideWrapper = document.createElement('div');
+    slideWrapper.className = 'slide';
+    slideWrapper.id = slideId;
+    return slideWrapper;
+}
+
+async function getVideoDuration(file) {
+    return new Promise((resolve) => {
+        const videoElement = document.createElement('video');
+        videoElement.preload = 'metadata';
+        videoElement.src = URL.createObjectURL(file);
+
+        videoElement.onloadedmetadata = function () {
+            resolve(videoElement.duration);
+            URL.revokeObjectURL(videoElement.src); // Libera a URL quando não for mais necessária
+        };
+    });
+}

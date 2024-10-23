@@ -9,7 +9,7 @@ async function connectToDatabase() {
       database: 'pi4'    // Nome do banco de dados
     });
 
-    console.log('Conectado ao banco de dados MySQL');
+    console.log('Pacote confirmado!');
     return connection;
   } catch (error) {
     console.error('Erro ao conectar ao banco de dados:', error);

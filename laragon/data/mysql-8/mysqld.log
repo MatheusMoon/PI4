@@ -149,3 +149,156 @@
 2024-10-09T14:59:47.867829Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
 2024-10-09T14:59:47.992200Z 0 [System] [MY-010931] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: ready for connections. Version: '8.0.30'  socket: ''  port: 3306  MySQL Community Server - GPL.
 2024-10-09T14:59:47.992241Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2024-10-15T23:18:21.386484Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-file-priv: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+2024-10-15T23:18:21.387156Z 0 [Warning] [MY-010918] [Server] 'default_authentication_plugin' is deprecated and will be removed in a future release. Please use authentication_policy instead.
+2024-10-15T23:18:21.387201Z 0 [System] [MY-010116] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld (mysqld 8.0.30) starting as process 10380
+2024-10-15T23:18:21.476044Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-10-15T23:18:22.329547Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-10-15T23:18:22.930239Z 0 [System] [MY-010229] [Server] Starting XA crash recovery...
+2024-10-15T23:18:22.936105Z 0 [System] [MY-010232] [Server] XA crash recovery finished.
+2024-10-15T23:18:23.030788Z 0 [Warning] [MY-013829] [Server] Missing data directory for ICU regular expressions: C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\lib\private\.
+2024-10-15T23:18:23.128977Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-10-15T23:18:23.129679Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-10-15T23:18:23.261771Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2024-10-15T23:18:23.261877Z 0 [System] [MY-010931] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: ready for connections. Version: '8.0.30'  socket: ''  port: 3306  MySQL Community Server - GPL.
+2024-10-17T21:33:50.617079Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-file-priv: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+2024-10-17T21:33:50.617731Z 0 [Warning] [MY-010918] [Server] 'default_authentication_plugin' is deprecated and will be removed in a future release. Please use authentication_policy instead.
+2024-10-17T21:33:50.617777Z 0 [System] [MY-010116] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld (mysqld 8.0.30) starting as process 2012
+2024-10-17T21:33:50.731259Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-10-17T21:33:51.773741Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-10-17T21:33:52.354217Z 0 [System] [MY-010229] [Server] Starting XA crash recovery...
+2024-10-17T21:33:52.360014Z 0 [System] [MY-010232] [Server] XA crash recovery finished.
+2024-10-17T21:33:52.485831Z 0 [Warning] [MY-013829] [Server] Missing data directory for ICU regular expressions: C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\lib\private\.
+2024-10-17T21:33:52.523757Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-10-17T21:33:52.524529Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-10-17T21:33:52.629684Z 0 [System] [MY-010931] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: ready for connections. Version: '8.0.30'  socket: ''  port: 3306  MySQL Community Server - GPL.
+2024-10-17T21:33:52.629702Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2024-10-18T01:16:41.544366Z 945 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.0.30).
+2024-10-18T01:16:41.547828Z 0 [System] [MY-013105] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Normal shutdown.
+2024-10-18T01:16:43.577048Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 856  user: 'root'.
+2024-10-18T01:16:43.579062Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 864  user: 'root'.
+2024-10-18T01:16:43.581064Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 872  user: 'root'.
+2024-10-18T01:16:43.588044Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 848  user: 'root'.
+2024-10-18T01:16:43.589578Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 880  user: 'root'.
+2024-10-18T01:16:43.591191Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 888  user: 'root'.
+2024-10-18T01:16:43.592876Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 896  user: 'root'.
+2024-10-18T01:16:43.594443Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 904  user: 'root'.
+2024-10-18T01:16:43.595932Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 912  user: 'root'.
+2024-10-18T01:16:43.597333Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 920  user: 'root'.
+2024-10-18T01:16:43.598781Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 928  user: 'root'.
+2024-10-18T01:16:43.600781Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 936  user: 'root'.
+2024-10-18T01:16:43.602656Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 944  user: 'root'.
+2024-10-18T01:16:43.604122Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 857  user: 'root'.
+2024-10-18T01:16:43.606915Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 865  user: 'root'.
+2024-10-18T01:16:43.609641Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 873  user: 'root'.
+2024-10-18T01:16:43.612328Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 849  user: 'root'.
+2024-10-18T01:16:43.614162Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 881  user: 'root'.
+2024-10-18T01:16:43.616186Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 889  user: 'root'.
+2024-10-18T01:16:43.618382Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 897  user: 'root'.
+2024-10-18T01:16:43.620108Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 905  user: 'root'.
+2024-10-18T01:16:43.621516Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 913  user: 'root'.
+2024-10-18T01:16:43.623524Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 921  user: 'root'.
+2024-10-18T01:16:43.649846Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 937  user: 'root'.
+2024-10-18T01:16:43.680171Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 929  user: 'root'.
+2024-10-18T01:16:43.697424Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 866  user: 'root'.
+2024-10-18T01:16:43.699925Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 858  user: 'root'.
+2024-10-18T01:16:43.704519Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 874  user: 'root'.
+2024-10-18T01:16:43.707130Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 850  user: 'root'.
+2024-10-18T01:16:43.708466Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 842  user: 'root'.
+2024-10-18T01:16:43.710001Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 882  user: 'root'.
+2024-10-18T01:16:43.712011Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 890  user: 'root'.
+2024-10-18T01:16:43.713755Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 898  user: 'root'.
+2024-10-18T01:16:43.715111Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 914  user: 'root'.
+2024-10-18T01:16:43.716387Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 906  user: 'root'.
+2024-10-18T01:16:43.718268Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 922  user: 'root'.
+2024-10-18T01:16:43.730098Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 930  user: 'root'.
+2024-10-18T01:16:43.734537Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 938  user: 'root'.
+2024-10-18T01:16:43.739117Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 859  user: 'root'.
+2024-10-18T01:16:43.741043Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 867  user: 'root'.
+2024-10-18T01:16:43.742397Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 843  user: 'root'.
+2024-10-18T01:16:43.744173Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 851  user: 'root'.
+2024-10-18T01:16:43.745586Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 875  user: 'root'.
+2024-10-18T01:16:43.747584Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 883  user: 'root'.
+2024-10-18T01:16:43.748998Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 891  user: 'root'.
+2024-10-18T01:16:43.751065Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 899  user: 'root'.
+2024-10-18T01:16:43.770721Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 907  user: 'root'.
+2024-10-18T01:16:43.774058Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 915  user: 'root'.
+2024-10-18T01:16:43.775624Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 923  user: 'root'.
+2024-10-18T01:16:43.776954Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 931  user: 'root'.
+2024-10-18T01:16:43.778362Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 939  user: 'root'.
+2024-10-18T01:16:43.780758Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 860  user: 'root'.
+2024-10-18T01:16:43.783863Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 868  user: 'root'.
+2024-10-18T01:16:43.786211Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 844  user: 'root'.
+2024-10-18T01:16:43.787721Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 852  user: 'root'.
+2024-10-18T01:16:43.790160Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 876  user: 'root'.
+2024-10-18T01:16:43.792679Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 892  user: 'root'.
+2024-10-18T01:16:43.794165Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 884  user: 'root'.
+2024-10-18T01:16:43.796165Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 900  user: 'root'.
+2024-10-18T01:16:43.798285Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 916  user: 'root'.
+2024-10-18T01:16:43.800594Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 908  user: 'root'.
+2024-10-18T01:16:43.803576Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 924  user: 'root'.
+2024-10-18T01:16:43.806090Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 932  user: 'root'.
+2024-10-18T01:16:43.807500Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 940  user: 'root'.
+2024-10-18T01:16:43.809352Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 853  user: 'root'.
+2024-10-18T01:16:43.810823Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 861  user: 'root'.
+2024-10-18T01:16:43.812603Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 869  user: 'root'.
+2024-10-18T01:16:43.814586Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 845  user: 'root'.
+2024-10-18T01:16:43.818724Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 877  user: 'root'.
+2024-10-18T01:16:43.824638Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 885  user: 'root'.
+2024-10-18T01:16:43.832239Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 893  user: 'root'.
+2024-10-18T01:16:43.834816Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 901  user: 'root'.
+2024-10-18T01:16:43.836349Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 909  user: 'root'.
+2024-10-18T01:16:43.837988Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 917  user: 'root'.
+2024-10-18T01:16:43.839470Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 925  user: 'root'.
+2024-10-18T01:16:43.840906Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 933  user: 'root'.
+2024-10-18T01:16:43.842588Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 941  user: 'root'.
+2024-10-18T01:16:43.844759Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 854  user: 'root'.
+2024-10-18T01:16:43.846680Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 862  user: 'root'.
+2024-10-18T01:16:43.849541Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 870  user: 'root'.
+2024-10-18T01:16:43.853418Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 846  user: 'root'.
+2024-10-18T01:16:43.855834Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 878  user: 'root'.
+2024-10-18T01:16:43.857544Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 886  user: 'root'.
+2024-10-18T01:16:43.859187Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 894  user: 'root'.
+2024-10-18T01:16:43.860695Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 902  user: 'root'.
+2024-10-18T01:16:43.863713Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 910  user: 'root'.
+2024-10-18T01:16:43.865234Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 918  user: 'root'.
+2024-10-18T01:16:43.866575Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 926  user: 'root'.
+2024-10-18T01:16:43.868739Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 934  user: 'root'.
+2024-10-18T01:16:43.870417Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 942  user: 'root'.
+2024-10-18T01:16:43.872396Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 855  user: 'root'.
+2024-10-18T01:16:43.894690Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 863  user: 'root'.
+2024-10-18T01:16:43.897780Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 871  user: 'root'.
+2024-10-18T01:16:43.902703Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 847  user: 'root'.
+2024-10-18T01:16:43.910069Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 879  user: 'root'.
+2024-10-18T01:16:43.913056Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 887  user: 'root'.
+2024-10-18T01:16:43.914762Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 895  user: 'root'.
+2024-10-18T01:16:43.916270Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 903  user: 'root'.
+2024-10-18T01:16:43.917741Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 911  user: 'root'.
+2024-10-18T01:16:43.923365Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 927  user: 'root'.
+2024-10-18T01:16:43.928957Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 919  user: 'root'.
+2024-10-18T01:16:43.937991Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 935  user: 'root'.
+2024-10-18T01:16:43.939944Z 0 [Warning] [MY-010909] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Forcing close of thread 943  user: 'root'.
+2024-10-18T01:16:45.591001Z 0 [System] [MY-010910] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Shutdown complete (mysqld 8.0.30)  MySQL Community Server - GPL.
+2024-10-18T02:09:07.824879Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-file-priv: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+2024-10-18T02:09:07.824983Z 0 [Warning] [MY-010918] [Server] 'default_authentication_plugin' is deprecated and will be removed in a future release. Please use authentication_policy instead.
+2024-10-18T02:09:07.825033Z 0 [System] [MY-010116] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld (mysqld 8.0.30) starting as process 1588
+2024-10-18T02:09:08.055125Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-10-18T02:09:09.347394Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-10-18T02:09:11.966794Z 0 [Warning] [MY-013829] [Server] Missing data directory for ICU regular expressions: C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\lib\private\.
+2024-10-18T02:09:12.285548Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-10-18T02:09:12.286301Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-10-18T02:09:12.492251Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2024-10-18T02:09:12.492423Z 0 [System] [MY-010931] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: ready for connections. Version: '8.0.30'  socket: ''  port: 3306  MySQL Community Server - GPL.
+2024-10-18T02:10:07.717166Z 8 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.0.30).
+2024-10-18T02:10:07.718123Z 0 [System] [MY-013105] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Normal shutdown.
+2024-10-18T02:10:08.254218Z 0 [System] [MY-010910] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: Shutdown complete (mysqld 8.0.30)  MySQL Community Server - GPL.
+2024-10-18T02:10:35.370550Z 0 [Warning] [MY-010097] [Server] Insecure configuration for --secure-file-priv: Current value does not restrict location of generated files. Consider setting it to a valid, non-empty path.
+2024-10-18T02:10:35.370621Z 0 [Warning] [MY-010918] [Server] 'default_authentication_plugin' is deprecated and will be removed in a future release. Please use authentication_policy instead.
+2024-10-18T02:10:35.370660Z 0 [System] [MY-010116] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld (mysqld 8.0.30) starting as process 7984
+2024-10-18T02:10:35.403479Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-10-18T02:10:35.813767Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-10-18T02:10:36.382497Z 0 [Warning] [MY-013829] [Server] Missing data directory for ICU regular expressions: C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\lib\private\.
+2024-10-18T02:10:36.396221Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-10-18T02:10:36.396933Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-10-18T02:10:36.498734Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060
+2024-10-18T02:10:36.498881Z 0 [System] [MY-010931] [Server] C:\Users\Kabessote\Desktop\PI4\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysqld: ready for connections. Version: '8.0.30'  socket: ''  port: 3306  MySQL Community Server - GPL.
