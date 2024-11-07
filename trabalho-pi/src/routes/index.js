@@ -24,14 +24,157 @@ router.get('/manage', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/views/Manager.html'));
 });
 
+router.get('/selector', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/views/Playlist-Selector.html'));
+});
+
+router.get('/player', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/views/Player.html'));
+});
+
 router.get('/playlists', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/views/Choose-Playlists.html'));
 });
 
 // Rota para criar Playlists
 router.get('/create', (req, res) => {
-    res.sendFile(path.join(__dirname, '/src/views/Create-Playlists.html'));
+    res.sendFile(path.join(__dirname, '/src/views/Playlist-Editor.html'));
 });
+
+router.get('/edit', (req, res) => {
+    const playlistId = req.query.id;
+    res.sendFile(path.join(__dirname, '/src/views/Playlist-Editor.html'));
+});
+
+// Rota para buscar a playlist e seus itens para edição
+router.get('/api/edit/:id', async (req, res) => {
+    const { id } = req.params;
+  
+    try {  
+        const connection = await connectToDatabase();
+      const query = 'SELECT * FROM playlists WHERE id = ?';
+      const [playlist] = await connection.execute(query, [id]);
+  
+      if (!playlist) {
+        return res.status(404).json({ error: 'Playlist não encontrada' });
+      }
+  
+      const unicodeQuery = 'SELECT unicode FROM playlists WHERE id = ?';
+      const [unicodeData] = await connection.execute(unicodeQuery, [id]);
+  
+      const unicodeItems = unicodeData[0]?.unicode ? JSON.parse(unicodeData[0].unicode) : [];
+  
+      const transformedItems = unicodeItems.map(item => ({
+        type: item.type,
+        id: item.id,
+        duration: item.duration,
+      }));
+  
+      res.json({
+        playlist: {
+          id: playlist.id,
+          name: playlist.name,
+          coverId: playlist.coverId,
+          items: transformedItems
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao buscar playlist para edição:", error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+  
+// Rota para listar playlists com paginação
+router.get('/api/playlists', async (req, res) => {
+    const offset = Number.parseInt(req.query.offset, 10) || 0;
+    const limit = Number.parseInt(req.query.limit, 10) || 9;
+
+    try {
+        const connection = await connectToDatabase();
+        
+        const [playlists] = await connection.execute(
+            `SELECT id, name, cover_id AS coverId
+             FROM playlists
+             ORDER BY uploadDate DESC
+             LIMIT ${offset}, ${limit}`
+        );
+
+        res.json({ playlists });
+        connection.end();
+    } catch (error) {
+        console.error("Erro ao buscar playlists:", error);
+        res.status(500).json({ message: "Erro ao buscar playlists" });
+    }
+});
+
+// Rota para buscar uma imagem específica pelo ID
+router.get('/api/images/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const connection = await connectToDatabase();
+
+        // Query para obter o conteúdo da imagem
+        const [imageRows] = await connection.execute(
+            `SELECT content FROM images WHERE id = ${id}`, 
+            
+        );
+
+        if (imageRows.length === 0) {
+            return res.status(404).json({ message: 'Imagem não encontrada' });
+        }
+
+        const image = imageRows[0].content;
+
+        // Definindo o cabeçalho para exibir a imagem
+        res.setHeader('Content-Type', 'images/png'); // Ajuste o tipo MIME conforme necessário
+        res.send(image);
+    } catch (error) {
+        console.error("Erro ao buscar imagem:", error);
+        res.status(500).json({ message: "Erro ao buscar imagem" });
+    }
+});
+
+
+// Rota para buscar detalhes de uma playlist específica
+router.get('/api/playlists/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const connection = await connectToDatabase();
+
+        // Buscar a playlist pelo ID, incluindo o campo unicode
+        const [playlistRows] = await connection.execute(
+            `SELECT id, name, cover_id AS coverId, unicode
+             FROM playlists
+             WHERE id = ${id}`, 
+        );
+
+        if (playlistRows.length === 0) {
+            return res.status(404).json({ message: 'Playlist não encontrada' });
+        }
+
+        const playlist = playlistRows[0];
+        const unicodeData = JSON.parse(playlist.unicode); // Parse do JSON de unicode
+
+        // Carregar os itens com base nas informações de unicode
+        playlist.items = await Promise.all(unicodeData.map(async (item) => {
+            const { table, id, duration } = item;
+            const [itemRows] = await connection.execute(
+                `SELECT id, type, ? AS time FROM ?? WHERE id = ?`,
+                [duration, table, id]
+            );
+
+            return itemRows[0];
+        }));
+
+        res.json(playlist);
+    } catch (error) {
+        console.error('Erro ao buscar detalhes da playlist:', error);
+        res.status(500).json({ message: 'Erro ao buscar a playlist' });
+    }
+});
+
 
 // Rota para upload de imagem
 const uploadImage = async (req, res) => {
@@ -152,7 +295,7 @@ router.get('/videos/:id', async (req, res) => {
 
         const video = rows[0].content;
         
-        res.setHeader('Content-Type', 'video/mp4'); // Ajuste conforme necessário
+        res.setHeader('Content-Type', 'video/mp4');
         res.send(video);
         
     } catch (error) {
@@ -255,7 +398,6 @@ router.get('/playlists/:id', async (req, res) => {
     }
 });
 
-
 // Rota para salvar a playlist
 router.post('/save-playlist', async (req, res) => {
     console.log('Dados recebidos:', req.body); // Log dos dados recebidos
@@ -267,8 +409,14 @@ router.post('/save-playlist', async (req, res) => {
         return res.status(400).json({ success: false, message: 'Nome da playlist é obrigatório!' });
     }
 
-    if (!Array.isArray(unicode)) {
+    if (!Array.isArray(unicode) || unicode.length === 0) {
         return res.status(400).json({ success: false, message: 'Os itens da playlist são obrigatórios!' });
+    }
+
+    // Verifica se todos os itens possuem ID
+    const hasInvalidItems = unicode.some(item => !item.id);
+    if (hasInvalidItems) {
+        return res.status(400).json({ success: false, message: 'Todos os itens precisam ter um ID válido!' });
     }
 
     if (!coverId) {

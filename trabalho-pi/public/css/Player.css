@@ -1,0 +1,17 @@
+.full-screen-player {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensures it’s above other content */
+}
+
+.media-element {
+    max-width: 90%;
+    max-height: 90%;
+}
