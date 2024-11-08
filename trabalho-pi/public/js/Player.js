@@ -1,98 +1,100 @@
-let currentIndex = 0;
-let playlistItems = [];
-
-// Função que busca a playlist pelo ID e inicia a reprodução
-function fetchAndPlayPlaylist(playlistId) {
-    fetch(`/playlists/${playlistId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar a playlist');
-            }
-            return response.json();
-        })
-        .then(data => {
-            receivePlaylist(data.items);
-        })
-        .catch(error => {
-            console.error('Error fetching playlist:', error);
-        });
-}
-
-// Função que inicia a reprodução da lista de itens
-function startPlayback(items) {
-    playlistItems = items;
-    currentIndex = 0;
-    document.getElementById('full-screen-player').style.display = 'flex';
-    playCurrentItem();
-}
-
-// Função que reproduz o item atual da lista
-function playCurrentItem() {
-    if (currentIndex >= playlistItems.length) {
-        document.getElementById('full-screen-player').style.display = 'none';
-        return;
-    }
-
-    const item = playlistItems[currentIndex];
-    if (item.type === 'video') {
-        playVideo(item.id);
-    } else if (item.type === 'image') {
-        showImage(item.id);
-    } else if (item.type === 'text') {
-        showText(item.id);
+// Classe e função para carregar itens da playlist
+class PlaylistItem {
+    constructor(type, id, duration) {
+        this.type = type;
+        this.id = id;
+        this.duration = duration;
+        this.data = null; // Inicialmente sem dados carregados
     }
 }
 
-// Função que reproduz um vídeo pelo ID fornecido
-function playVideo(videoId) {
-    const videoPlayer = document.getElementById('video-player');
-    videoPlayer.src = `/videos/${videoId}`;
-    videoPlayer.style.display = 'block';
-    videoPlayer.play();
+let lstArquivos = []; // Lista que armazenará os itens carregados da playlist
+const CACHE_NAME = 'ArquivosPlayList'; // Nome do cache
+let pAtual = 0; // Índice atual para o item a ser exibido
+let intervalos = 0; // Controle do intervalo de exibição
 
-    videoPlayer.onended = () => {
-        currentIndex++;
-        playCurrentItem();
-    };
+async function fetchPlaylistData(playlistId) {
+    try {
+        const response = await fetch(`/api/playlists/${playlistId}`);
+        const { unicode } = await response.json();
+
+        // Parse do JSON e conversão para objetos PlaylistItem
+        const playlistItems = JSON.parse(unicode);
+        lstArquivos = await Promise.all(playlistItems.map(loadPlaylistItem));
+
+        // Inicia a exibição dos arquivos
+        mostrarArquivo();
+    } catch (error) {
+        console.error("Erro ao carregar a playlist:", error);
+    }
 }
 
-// Função que exibe uma imagem pelo ID fornecido
-function showImage(imageId) {
-    const imagePlayer = document.getElementById('image-player');
-    imagePlayer.src = `/images/${imageId}`;
-    imagePlayer.style.display = 'block';
+async function loadPlaylistItem(item) {
+    const { type, id, duration } = item;
+    const link = getLink(type, id);
+    let data = null;
 
-    imagePlayer.onload = () => {
-        setTimeout(() => {
-            imagePlayer.style.display = 'none';
-            currentIndex++;
-            playCurrentItem();
-        }, 5000);
-    };
+    if (type === 'image' || type === 'video') {
+        const response = await fetch(link);
+        const blob = await response.blob();
+        data = URL.createObjectURL(blob);
+    } else if (type === 'text') {
+        const response = await fetch(link);
+        const textData = await response.json();
+        data = {
+            content: textData.content,
+            backgroundImageUrl: textData.backgroundImageUrl
+        };
+    }
+
+    return { type, data, duration };
 }
 
-// Função que exibe um texto pelo ID fornecido
-function showText(textId) {
-    fetch(`/text/${textId}`)
-        .then(response => response.json())
-        .then(data => {
-            const textPlayer = document.getElementById('text-player');
-            textPlayer.innerText = data.content;
-            textPlayer.style.display = 'block';
-
-            setTimeout(() => {
-                textPlayer.style.display = 'none';
-                currentIndex++;
-                playCurrentItem();
-            }, 5000);
-        });
+function getLink(type, id) {
+    switch (type) {
+        case 'image': return `/images/${id}`;
+        case 'video': return `/videos/${id}`;
+        case 'text': return `/text/${id}`;
+        default: return null;
+    }
 }
 
-// Função que recebe a lista de itens e inicia a reprodução
-function receivePlaylist(items) {
-    startPlayback(items);
+function mostrarArquivo() {
+    pararTempo();
+
+    const arq = lstArquivos[pAtual];
+    const canvas = document.querySelector("#canvas");
+
+    if (arq.type === 'image') {
+        canvas.innerHTML = `<img src="${arq.data}" alt="Imagem">`;
+        iniciarTempo(arq.duration);
+    } else if (arq.type === 'video') {
+        canvas.innerHTML = `<video onended="mostrarArquivo()" src="${arq.data}" autoplay muted></video>`;
+    } else if (arq.type === 'text') {
+        const { content, backgroundImageUrl } = arq.data;
+        const contentHtml = backgroundImageUrl
+            ? `<div style="background-image: url('${backgroundImageUrl}'); background-size: cover; height: 100%; color: #fff; padding: 20px;">${content}</div>`
+            : `<div style="padding: 20px;">${content}</div>`;
+
+        canvas.innerHTML = contentHtml;
+        iniciarTempo(arq.duration);
+    }
+
+    pAtual = (pAtual + 1) % lstArquivos.length;
 }
 
-// Chame esta função com o ID da playlist quando a página do player carregar
-const playlistId = 'your_playlist_id_here'; // Substitua pela recuperação dinâmica do ID
-fetchAndPlayPlaylist(playlistId);
+function iniciarTempo(duration) {
+    intervalos = setInterval(mostrarArquivo, duration * 1000);
+}
+
+function pararTempo() {
+    clearInterval(intervalos);
+}
+
+function carregarLista() {
+    const playlistId = prompt("Digite o ID da playlist:");
+    if (playlistId) {
+        document.getElementById("butCarregar").remove();
+        fetchPlaylistData(playlistId);
+    }
+}

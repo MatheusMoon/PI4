@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reprodutor de Playlist</title>
-    <link rel="stylesheet" href="/css/Player.css"> <!-- Estilo opcional -->
+    <title>Player de Playlist</title>
+    <link rel="stylesheet" href="css/Player.css">
 </head>
 <body>
-    <div id="player-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
-        <video id="video-player" controls style="max-width: 100%; display: none;"></video>
-        <img id="image-player" alt="Imagem do item" style="display:none; max-width: 100%;" />
-        <div id="text-player" style="display:none; font-size: 24px; text-align: center;"></div>
-    </div>
-    
-    <script src="/js/Player.js"></script>
+
+    <h1>Player de Playlist</h1>
+    <div id="canvas">Clique em "Carregar Playlist" para iniciar</div>
+    <button id="butCarregar" onclick="carregarLista()">Carregar Playlist</button>
+
+    <script src="js/Player.js"></script>
 </body>
 </html>
