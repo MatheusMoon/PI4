@@ -67,12 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Função para criar nova playlist
-  function createNewPlaylist() {
-    console.log("Criando nova playlist...");
-    // Implementar lógica para criar nova playlist
-  }
-
   // Função de reprodução
   window.playPlaylist = (id) => {
     console.log(`Reproduzindo playlist ${id}`);
@@ -97,3 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inicializa o grid com o card de criação e playlists
   loadPlaylists(initialLimit); // Carrega 8 playlists no primeiro carregamento
 });
+
+function createNewPlaylist() {
+  console.log("Criando nova playlist...");
+  window.location.href = "/create";
+}

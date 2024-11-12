@@ -658,7 +658,6 @@ async function fetchPlaylistData() {
     }
 }
 
-
 async function loadPlaylistItems() {
     const playlistId = getPlaylistIdFromUrl();  // Obtém o ID da playlist a partir da URL
     
