@@ -540,6 +540,6 @@ echo _gettext("These functions are meant to return a binary result; to avoid inc
 
     public function getSourceContext()
     {
-        return new Source("", "javascript/variables.twig", "C:\\laragon\\etc\\apps\\phpMyAdmin\\templates\\javascript\\variables.twig");
+        return new Source("", "javascript/variables.twig", "C:\\PI_iv\\PI_IV\\PI4\\laragon\\etc\\apps\\phpMyAdmin\\templates\\javascript\\variables.twig");
     }
 }

@@ -81,6 +81,6 @@ echo _gettext("Close");
 
     public function getSourceContext()
     {
-        return new Source("", "modals/create_view.twig", "C:\\laragon\\etc\\apps\\phpMyAdmin\\templates\\modals\\create_view.twig");
+        return new Source("", "modals/create_view.twig", "C:\\PI_iv\\PI_IV\\PI4\\laragon\\etc\\apps\\phpMyAdmin\\templates\\modals\\create_view.twig");
     }
 }
